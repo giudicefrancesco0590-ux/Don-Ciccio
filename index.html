@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Don Ciccio – Pizzeria &amp; Lieferservice Kreuztal</title>
+  <meta name="description" content="Don Ciccio Kreuztal – Authentische italienische Pizza, Pasta &amp; Salate. Lieferservice &amp; Abholung. Jetzt bestellen: 02732 76 77 635" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ===========================
+       RESET & VARIABLES
+    =========================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    ul { list-style: none; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    :root {
+      --bg-primary:    transparent;
+      --bg-secondary:  rgba(0,0,0,0.60);
+      --bg-card:       rgba(255,255,255,0.05);
+      --bg-card-hover: rgba(255,255,255,0.08);
+
+      --color-primary:       #c8102e;
+      --color-primary-light: #e8304a;
+      --color-accent:        #d4a853;
+      --color-accent-light:  #e8c070;
+
+      --text-primary:   #ffffff;
+      --text-secondary: rgba(255,255,255,0.70);
+      --text-muted:     rgba(255,255,255,0.40);
+
+      --border:       rgba(255,255,255,0.10);
+      --border-hover: rgba(255,255,255,0.22);
+
+      --radius-sm: 8px;
+      --radius-lg: 16px;
+
+      --transition:      0.2s ease;
+      --transition-slow: 0.4s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #0a0a0a;
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 100px 0;
+    }
+
+    /* ===========================
+       GLOBAL VIDEO BACKGROUND
+    =========================== */
+    #bg-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    #video-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.68);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* ===========================
+       TYPOGRAPHY
+    =========================== */
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 16px;
+    }
+    .label::before {
+      content: '';
+      width: 20px; height: 1px;
+      background: var(--color-accent);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 580px;
+      line-height: 1.75;
+      margin-bottom: 48px;
+    }
+
+    /* ===========================
+       BUTTONS
+    =========================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 15px;
+      transition: all var(--transition);
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--color-primary-light); transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-hover);
+    }
+    .btn-outline:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+    .btn-gold {
+      background: var(--color-accent);
+      color: #000;
+      font-weight: 700;
+    }
+    .btn-gold:hover { background: var(--color-accent-light); transform: translateY(-1px); }
+
+    /* ===========================
+       NAVBAR
+    =========================== */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      transition: all var(--transition-slow);
+    }
+
+    .navbar.scrolled {
+      background: rgba(5,0,0,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      gap: 32px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+    }
+    .logo-icon svg { width: 46px; height: 46px; display: block; }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      line-height: 1;
+    }
+
+    .logo-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      font-style: italic;
+      color: #fff;
+      letter-spacing: 0.02em;
+    }
+
+    .logo-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(212,168,83,0.4);
+    }
+
+    .logo-sub {
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: all var(--transition);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 72px 0 0 0;
+      background: rgba(5,0,0,0.96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      z-index: 999;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ===========================
+       HERO
+    =========================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 72px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 260px;
+      background: linear-gradient(to bottom, transparent, #0a0a0a);
+      z-index: 2;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 720px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(212,168,83,0.12);
+      border: 1px solid rgba(212,168,83,0.3);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-accent-light);
+      margin-bottom: 28px;
+    }
+
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--color-accent);
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 40px;
+      max-width: 540px;
+    }
+
+    .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ===========================
+       ÜBER UNS
+    =========================== */
+    .about {
+      background: var(--bg-secondary);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-img {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .about-img img {
+      width: 100%;
+      height: 480px;
+      object-fit: cover;
+    }
+
+    .about-img-badge {
+      position: absolute;
+      bottom: 24px; left: 24px;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212,168,83,0.3);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .about-img-badge-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+
+    .about-img-badge-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .about-features {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 36px;
+    }
+
+    .about-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .about-feature-icon {
+      width: 40px; height: 40px;
+      background: rgba(200,16,46,0.12);
+      border: 1px solid rgba(200,16,46,0.25);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .about-feature-icon svg { width: 18px; height: 18px; color: var(--color-primary-light); }
+
+    .about-feature h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .about-feature p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* ===========================
+       SPEISEKARTE
+    =========================== */
+    .menu { }
+
+    .menu-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .menu-tab {
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 500;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .menu-tab.active, .menu-tab:hover {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .menu-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+    .menu-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+    }
+
+    .menu-card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .menu-card-body { padding: 20px; }
+
+    .menu-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .menu-card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .menu-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .menu-card-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+
+    .menu-card-btn {
+      width: 32px; height: 32px;
+      background: var(--color-primary);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: none; cursor: pointer;
+      transition: background var(--transition);
+    }
+    .menu-card-btn:hover { background: var(--color-primary-light); }
+    .menu-card-btn svg { width: 14px; height: 14px; color: #fff; }
+
+    /* ===========================
+       LIEFERSERVICE
+    =========================== */
+    .delivery {
+      background: var(--bg-secondary);
+    }
+
+    .delivery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .delivery-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      margin-top: 36px;
+    }
+
+    .delivery-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .step-num {
+      width: 44px; height: 44px;
+      background: var(--color-primary);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-content h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .step-content p  { font-size: 14px; color: var(--text-secondary); }
+
+    .delivery-info-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+    }
+
+    .delivery-info-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 24px;
+    }
+
+    .delivery-info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .delivery-info-item:last-child { border-bottom: none; }
+
+    .delivery-info-item svg { width: 18px; height: 18px; color: var(--color-accent); flex-shrink: 0; }
+
+    .delivery-info-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .delivery-info-value { font-size: 15px; font-weight: 500; }
+
+    /* ===========================
+       BEWERTUNGEN
+    =========================== */
+    .reviews { }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .review-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: all var(--transition);
+    }
+    .review-card:hover { border-color: var(--border-hover); }
+
+    .review-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 16px;
+      color: var(--color-accent);
+    }
+    .review-stars svg { width: 16px; height: 16px; fill: currentColor; }
+
+    .review-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .review-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .review-name { font-size: 14px; font-weight: 600; }
+    .review-date { font-size: 12px; color: var(--text-muted); }
+
+    /* ===========================
+       KONTAKT / ÖFFNUNGSZEITEN
+    =========================== */
+    .contact {
+      background: var(--bg-secondary);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      margin-top: 60px;
+      align-items: start;
+    }
+
+    .contact-info-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+
+    .contact-info-block h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      margin-bottom: 24px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .contact-item-icon {
+      width: 40px; height: 40px;
+      background: rgba(200,16,46,0.1);
+      border: 1px solid rgba(200,16,46,0.2);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-item-icon svg { width: 18px; height: 18px; color: var(--color-primary-light); }
+
+    .contact-item-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .contact-item-value { font-size: 15px; font-weight: 500; color: var(--text-primary); }
+
+    .hours-table { width: 100%; margin-top: 8px; }
+    .hours-table tr { border-bottom: 1px solid var(--border); }
+    .hours-table tr:last-child { border-bottom: none; }
+    .hours-table td { padding: 10px 0; font-size: 14px; }
+    .hours-table td:last-child { text-align: right; color: var(--text-secondary); }
+    .hours-open { color: #22c55e !important; font-weight: 600; }
+
+    .contact-form {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+
+    .contact-form h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+
+    .contact-form p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--text-primary);
+      transition: border-color var(--transition);
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(200,16,46,0.12);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    /* ===========================
+       FOOTER
+    =========================== */
+    footer {
+      background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 64px 0 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-top: 16px;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .footer-col ul {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col ul li a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+    .footer-col ul li a:hover { color: var(--text-primary); }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* ===========================
+       MODALS
+    =========================== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.80);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: #111;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      max-width: 680px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 48px;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+    .modal-close:hover { color: var(--text-primary); }
+    .modal-close svg { width: 16px; height: 16px; }
+
+    .modal-box h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-box h3 { font-size: 1rem; font-weight: 700; margin: 24px 0 8px; }
+    .modal-box p, .modal-box address { font-size: 14px; color: var(--text-secondary); line-height: 1.75; font-style: normal; }
+    .modal-box a { color: var(--color-accent); }
+
+    /* ===========================
+       ANIMATIONS
+    =========================== */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ===========================
+       RESPONSIVE
+    =========================== */
+    @media (max-width: 1024px) {
+      .menu-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 72px 0; }
+      .nav-links, .nav-actions { display: none; }
+      .hamburger { display: flex; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .delivery-grid { grid-template-columns: 1fr; gap: 40px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+      .reviews-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .menu-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.4rem; }
+      .modal-box { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Global background video -->
+  <video id="bg-video" autoplay muted loop playsinline webkit-playsinline preload="auto" disablePictureInPicture aria-hidden="true">
+    <source src="https://res.cloudinary.com/ddntlvfpn/video/upload/q_auto,f_auto/WhatsApp_Video_2026-03-01_at_17.04.30_qynqsp.mp4" type="video/mp4" />
+  </video>
+  <div id="video-overlay" aria-hidden="true"></div>
+
+  <!-- ========================
+       NAVIGATION
+  ========================= -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="#" aria-label="Don Ciccio Pizzeria">
+          <img
+            src="https://res.cloudinary.com/ddntlvfpn/image/upload/q_auto,f_auto,h_64/WhatsApp_Image_2026-02-28_at_21.32.15_mwkmny"
+            alt="Don Ciccio Logo"
+            height="64"
+            style="height:64px; width:auto; mix-blend-mode:multiply; filter:brightness(1.1);"
+          />
+        </a>
+
+        <ul class="nav-links" role="list">
+          <li><a href="#about">Über uns</a></li>
+          <li><a href="#menu">Speisekarte</a></li>
+          <li><a href="#delivery">Lieferservice</a></li>
+          <li><a href="#contact">Kontakt</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a href="tel:02732767635" class="btn btn-outline" style="padding:10px 20px; font-size:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l1.06-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.76 16l.16.92z"/></svg>
+            02732 76 77 635
+          </a>
+          <a href="#menu" class="btn btn-primary" style="padding:10px 20px; font-size:14px;">Jetzt bestellen</a>
+        </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Menü öffnen">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#about"    onclick="closeMobileMenu()">Über uns</a>
+    <a href="#menu"     onclick="closeMobileMenu()">Speisekarte</a>
+    <a href="#delivery" onclick="closeMobileMenu()">Lieferservice</a>
+    <a href="#contact"  onclick="closeMobileMenu()">Kontakt</a>
+    <a href="#menu" onclick="closeMobileMenu()" class="btn btn-primary" style="text-align:center; justify-content:center;">Jetzt bestellen</a>
+  </div>
+
+  <main>
+    <!-- ========================
+         HERO
+    ========================= -->
+    <section class="hero" id="home">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="hero-badge-dot" aria-hidden="true"></span>
+            Lieferservice &amp; Abholung · Kreuztal
+          </div>
+          <h1>Echte italienische<br><em>Pizzakunst</em> –<br>direkt zu Ihnen</h1>
+          <p class="hero-sub">Hausgemachter Teig, San-Marzano-Tomaten und die besten Zutaten Italiens – bei Don Ciccio ist jede Pizza ein Erlebnis.</p>
+          <div class="hero-cta">
+            <a href="#menu" class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Speisekarte ansehen
+            </a>
+            <a href="#delivery" class="btn btn-gold">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Lieferung bestellen
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        Mehr entdecken
+      </div>
+    </section>
+
+    <!-- ========================
+         ÜBER UNS
+    ========================= -->
+    <section class="about" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-img animate-on-scroll">
+            <img
+              src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=700&q=80&auto=format&fit=crop"
+              alt="Don Ciccio Pizzeria – Authentische italienische Küche"
+              width="700" height="480" loading="lazy"
+            />
+            <div class="about-img-badge">
+              <div class="about-img-badge-num">Nr.1</div>
+              <div class="about-img-badge-text">in Kreuztal</div>
+            </div>
+          </div>
+
+          <div class="animate-on-scroll">
+            <span class="label">Über uns</span>
+            <h2 class="section-title">Mit Liebe gemacht –<br>seit Generationen</h2>
+            <p class="section-subtitle">Don Ciccio steht für authentische neapolitanische Küche. Unser Teig ruht 48 Stunden, unsere Tomaten kommen direkt aus Kampanien – bei uns schmecken Sie den Unterschied.</p>
+
+            <div class="about-features">
+              <div class="about-feature">
+                <div class="about-feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div>
+                  <h4>Authentische Rezepte</h4>
+                  <p>Überlieferte Familienrezepte direkt aus Neapel – Mit Leidenschaft für echte italienische Küche in Kreuztal.</p>
+                </div>
+              </div>
+              <div class="about-feature">
+                <div class="about-feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div>
+                  <h4>Frisch & schnell</h4>
+                  <p>Jede Pizza frisch zubereitet – Lieferung in unter 30 Minuten.</p>
+                </div>
+              </div>
+              <div class="about-feature">
+                <div class="about-feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </div>
+                <div>
+                  <h4>Mit Herz gemacht</h4>
+                  <p>Jede Pizza ist Handarbeit – kein Fließband, kein Kompromiss.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         SPEISEKARTE
+    ========================= -->
+    <section class="menu" id="menu">
+      <div class="container">
+        <div class="animate-on-scroll">
+          <span class="label">Speisekarte</span>
+          <h2 class="section-title">Unsere Klassiker</h2>
+          <p class="section-subtitle">Alle Pizzen werden frisch auf Bestellung zubereitet – auch als glutenfreie Variante erhältlich.</p>
+        </div>
+
+        <div class="menu-tabs">
+          <button class="menu-tab active">Pizza</button>
+          <button class="menu-tab">Pasta</button>
+          <button class="menu-tab">Vorspeisen</button>
+          <button class="menu-tab">Desserts</button>
+          <button class="menu-tab">Getränke</button>
+        </div>
+
+        <div class="menu-grid">
+          <article class="menu-card animate-on-scroll">
+            <img class="menu-card-img" src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=80&auto=format&fit=crop" alt="Margherita" loading="lazy" width="400" height="180"/>
+            <div class="menu-card-body">
+              <div class="menu-card-name">1. Margherita</div>
+              <div class="menu-card-desc">San-Marzano-Tomatensauce, zart schmelzender Fior di Latte Mozzarella und frischer Basilikum</div>
+              <div class="menu-card-footer">
+                <span class="menu-card-price">9,90 €</span>
+                <button class="menu-card-btn" aria-label="In den Warenkorb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card animate-on-scroll">
+            <img class="menu-card-img" src="https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&q=80&auto=format&fit=crop" alt="Diavola" loading="lazy" width="400" height="180"/>
+            <div class="menu-card-body">
+              <div class="menu-card-name">6. Diavola</div>
+              <div class="menu-card-desc">Feurig pikante Salami, Paprika, rote Zwiebeln, Knoblauch, Chili, San-Marzano-Tomatensauce, Fior di Latte Mozzarella</div>
+              <div class="menu-card-footer">
+                <span class="menu-card-price">13,90 €</span>
+                <button class="menu-card-btn" aria-label="In den Warenkorb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card animate-on-scroll">
+            <img class="menu-card-img" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80&auto=format&fit=crop" alt="Quattro Stagioni" loading="lazy" width="400" height="180"/>
+            <div class="menu-card-body">
+              <div class="menu-card-name">5. Quattro Stagioni</div>
+              <div class="menu-card-desc">Salami, Schinken, aromatische Pilze, zarte Artischocken, San-Marzano-Tomatensauce, Fior di Latte Mozzarella</div>
+              <div class="menu-card-footer">
+                <span class="menu-card-price">13,90 €</span>
+                <button class="menu-card-btn" aria-label="In den Warenkorb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card animate-on-scroll">
+            <img class="menu-card-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80&auto=format&fit=crop" alt="Bufolina" loading="lazy" width="400" height="180"/>
+            <div class="menu-card-body">
+              <div class="menu-card-name">9. Bufolina</div>
+              <div class="menu-card-desc">Frischer Rucola, saftige Tomaten, cremiger Büffelmozzarella und aromatisches Pesto</div>
+              <div class="menu-card-footer">
+                <span class="menu-card-price">14,90 €</span>
+                <button class="menu-card-btn" aria-label="In den Warenkorb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card animate-on-scroll">
+            <img class="menu-card-img" src="https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=400&q=80&auto=format&fit=crop" alt="Pistacchio" loading="lazy" width="400" height="180"/>
+            <div class="menu-card-body">
+              <div class="menu-card-name">19. Pistacchio</div>
+              <div class="menu-card-desc">Fior di Latte Mozzarella, hausgemachter Pistazienpesto, feine Mortadella, cremige Burrata und gehackte Pistazien</div>
+              <div class="menu-card-footer">
+                <span class="menu-card-price">15,90 €</span>
+                <button class="menu-card-btn" aria-label="In den Warenkorb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              </div>
+            </div>
+          </article>
+
+          <article class="menu-card animate-on-scroll">
+            <img class="menu-card-img" src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=400&q=80&auto=format&fit=crop" alt="Gambero" loading="lazy" width="400" height="180"/>
+            <div class="menu-card-body">
+              <div class="menu-card-name">12. Gambero</div>
+              <div class="menu-card-desc">San-Marzano-Tomatensauce, Fior di Latte Mozzarella, saftige Garnelen, Eiertomaten, Rucola und Limettenöl</div>
+              <div class="menu-card-footer">
+                <span class="menu-card-price">16,90 €</span>
+                <button class="menu-card-btn" aria-label="In den Warenkorb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div style="text-align:center; margin-top:40px;">
+          <a href="#contact" class="btn btn-outline">Vollständige Speisekarte anfragen</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         LIEFERSERVICE
+    ========================= -->
+    <section class="delivery" id="delivery">
+      <div class="container">
+        <div class="delivery-grid">
+          <div class="animate-on-scroll">
+            <span class="label">Lieferservice</span>
+            <h2 class="section-title">Frisch zu Ihnen –<br>in 30 Minuten</h2>
+            <p class="section-subtitle">Bestellen Sie bequem per Telefon oder über unsere Bestellnummer – wir liefern warm und frisch direkt an Ihre Tür.</p>
+
+            <div class="delivery-steps">
+              <div class="delivery-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  <h4>Bestellen</h4>
+                  <p>Anrufen oder online bestellen – Ihre Wunschpizza aussuchen.</p>
+                </div>
+              </div>
+              <div class="delivery-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  <h4>Frisch zubereiten</h4>
+                  <p>Ihre Pizza wird direkt nach der Bestellung frisch gebacken.</p>
+                </div>
+              </div>
+              <div class="delivery-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  <h4>Lieferung genießen</h4>
+                  <p>In unter 30 Minuten heiß bei Ihnen – garantiert frisch.</p>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:36px;">
+              <a href="tel:02732767635" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l1.06-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.76 16l.16.92z"/></svg>
+                Jetzt anrufen & bestellen
+              </a>
+            </div>
+          </div>
+
+          <div class="delivery-info-box animate-on-scroll">
+            <h3>Lieferinfos</h3>
+
+            <div class="delivery-info-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div>
+                <div class="delivery-info-label">Lieferzeit</div>
+                <div class="delivery-info-value">Ca. 25–35 Minuten</div>
+              </div>
+            </div>
+
+            <div class="delivery-info-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <div>
+                <div class="delivery-info-label">Liefergebiet</div>
+                <div class="delivery-info-value">Kreuztal &amp; Umgebung</div>
+              </div>
+            </div>
+
+            <div class="delivery-info-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <div>
+                <div class="delivery-info-label">Mindestbestellwert</div>
+                <div class="delivery-info-value">12,00 €</div>
+              </div>
+            </div>
+
+            <div class="delivery-info-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              <div>
+                <div class="delivery-info-label">Zahlung</div>
+                <div class="delivery-info-value">Bar, EC-Karte, PayPal</div>
+              </div>
+            </div>
+
+            <div class="delivery-info-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l1.06-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.76 16l.16.92z"/></svg>
+              <div>
+                <div class="delivery-info-label">Bestellung</div>
+                <div class="delivery-info-value">02732 76 77 635</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         BEWERTUNGEN
+    ========================= -->
+    <section id="reviews">
+      <div class="container">
+        <div class="animate-on-scroll" style="text-align:center;">
+          <span class="label">Bewertungen</span>
+          <h2 class="section-title">Was unsere Gäste sagen</h2>
+        </div>
+
+        <div class="reviews-grid">
+          <div class="review-card animate-on-scroll">
+            <div class="review-stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="review-text">„Die beste Pizza in der ganzen Stadt! Der Teig ist unglaublich – man schmeckt sofort, dass er mit Liebe gemacht wird. Schnelle Lieferung, noch warm angekommen."</p>
+            <div class="review-author">
+              <div class="review-avatar">MK</div>
+              <div>
+                <div class="review-name">Maria K.</div>
+                <div class="review-date">Google · vor 2 Wochen</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-card animate-on-scroll">
+            <div class="review-stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="review-text">„Seit Jahren unser Stammlokal. Die Diavola ist einfach unschlagbar – genau scharf genug und der Käse perfekt. Lieferung immer pünktlich, Team sehr freundlich!"</p>
+            <div class="review-author">
+              <div class="review-avatar">TS</div>
+              <div>
+                <div class="review-name">Thomas S.</div>
+                <div class="review-date">Google · vor 1 Monat</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-card animate-on-scroll">
+            <div class="review-stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="review-text">„Echtes Highlight! Der Calzone Don Ciccio ist absolute Pflicht. Authentischer Geschmack, faire Preise und das freundlichste Personal. Sehr gerne wieder!"</p>
+            <div class="review-author">
+              <div class="review-avatar">AL</div>
+              <div>
+                <div class="review-name">Anna L.</div>
+                <div class="review-date">Google · vor 3 Wochen</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================
+         KONTAKT
+    ========================= -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="animate-on-scroll">
+          <span class="label">Kontakt</span>
+          <h2 class="section-title">Kommen Sie vorbei<br>oder bestellen Sie</h2>
+        </div>
+
+        <div class="contact-grid">
+          <div class="animate-on-scroll">
+            <div class="contact-info-block" style="margin-bottom:24px;">
+              <h3>Kontaktdaten</h3>
+
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l1.06-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.76 16l.16.92z"/></svg>
+                </div>
+                <div>
+                  <div class="contact-item-label">Telefon & Bestellung</div>
+                  <a href="tel:02732767635" class="contact-item-value">02732 76 77 635</a>
+                </div>
+              </div>
+
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <div>
+                  <div class="contact-item-label">Adresse</div>
+                  <div class="contact-item-value">Marburger Straße 5, 57223 Kreuztal</div>
+                </div>
+              </div>
+
+              <div class="contact-item">
+                <div class="contact-item-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <div>
+                  <div class="contact-item-label">E-Mail</div>
+                  <a href="mailto:info@don-ciccio.de" class="contact-item-value">info@don-ciccio.de</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="contact-info-block">
+              <h3>Öffnungszeiten</h3>
+              <table class="hours-table">
+                <tr><td>Montag</td><td>Geschlossen</td></tr>
+                <tr><td>Di – Fr</td><td class="hours-open">11:00–14:00 &amp; 17:00–22:00</td></tr>
+                <tr><td>Samstag</td><td class="hours-open">15:00–22:00</td></tr>
+                <tr><td>Sonntag</td><td class="hours-open">12:00–21:00</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="contact-form animate-on-scroll">
+            <h3>Nachricht senden</h3>
+            <p>Tischreservierung, Catering oder Fragen – wir melden uns schnell.</p>
+            <form id="contact-form" novalidate>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div class="form-group">
+                  <label for="cf-name">Name *</label>
+                  <input type="text" id="cf-name" placeholder="Max Mustermann" required />
+                </div>
+                <div class="form-group">
+                  <label for="cf-phone">Telefon</label>
+                  <input type="tel" id="cf-phone" placeholder="+49 …" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="cf-email">E-Mail *</label>
+                <input type="email" id="cf-email" placeholder="max@example.de" required />
+              </div>
+              <div class="form-group">
+                <label for="cf-subject">Betreff</label>
+                <select id="cf-subject">
+                  <option value="">Bitte wählen …</option>
+                  <option>Tischreservierung</option>
+                  <option>Catering / Großbestellung</option>
+                  <option>Allgemeine Anfrage</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="cf-message">Nachricht *</label>
+                <textarea id="cf-message" placeholder="Ihre Nachricht …" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" id="cf-submit" style="width:100%; justify-content:center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Nachricht senden
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================
+       FOOTER
+  ========================= -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#">
+            <img
+              src="https://res.cloudinary.com/ddntlvfpn/image/upload/q_auto,f_auto,h_80/WhatsApp_Image_2026-02-28_at_21.32.15_mwkmny"
+              alt="Don Ciccio Logo"
+              height="80"
+              style="height:80px; width:auto; mix-blend-mode:multiply; filter:brightness(1.1);"
+            />
+          </a>
+          <p style="margin-top:16px;">Authentische italienische Pizza – Lieferservice &amp; Abholung in Kreuztal. Anruf zur Bestellung!</p>
+          <div style="margin-top:16px;">
+            <a href="https://instagram.com/donciccio_kreuztal" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; font-size:14px; color:rgba(255,255,255,0.6); transition:color 0.2s;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              @donciccio_kreuztal
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Speisekarte</h4>
+          <ul>
+            <li><a href="#menu">Pizza</a></li>
+            <li><a href="#menu">Pasta</a></li>
+            <li><a href="#menu">Vorspeisen</a></li>
+            <li><a href="#menu">Desserts</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Info</h4>
+          <ul>
+            <li><a href="#about">Über uns</a></li>
+            <li><a href="#delivery">Lieferservice</a></li>
+            <li><a href="#contact">Kontakt</a></li>
+            <li><a href="#reviews">Bewertungen</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Rechtliches</h4>
+          <ul>
+            <li><a href="#" onclick="openModal('modal-impressum'); return false;">Impressum</a></li>
+            <li><a href="#" onclick="openModal('modal-datenschutz'); return false;">Datenschutz</a></li>
+            <li><a href="#" onclick="openModal('modal-agb'); return false;">AGB</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2025 Don Ciccio – Marburger Straße 5, 57223 Kreuztal</span>
+        <span>Mit ❤️ gemacht in Kreuztal</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================
+       MODALS
+  ========================= -->
+  <div class="modal-overlay" id="modal-impressum" onclick="closeModalOverlay(event,'modal-impressum')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-impressum')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <h2>Impressum</h2>
+      <h3>Angaben gemäß § 5 TMG</h3>
+      <address>Don Ciccio Pizzeria<br>[Inhaber Name]<br>Marburger Straße 5<br>57223 Kreuztal</address>
+      <h3>Kontakt</h3>
+      <p>Telefon: 02732 76 77 635<br>E-Mail: <a href="mailto:info@don-ciccio.de">info@don-ciccio.de</a></p>
+      <h3>Umsatzsteuer-ID</h3>
+      <p>DE [USt-ID eintragen]</p>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-datenschutz" onclick="closeModalOverlay(event,'modal-datenschutz')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-datenschutz')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <h2>Datenschutzerklärung</h2>
+      <h3>1. Verantwortliche Stelle</h3>
+      <p>Don Ciccio Pizzeria, Marburger Straße 5, 57223 Kreuztal<br>E-Mail: <a href="mailto:info@don-ciccio.de">info@don-ciccio.de</a></p>
+      <h3>2. Datenerfassung</h3>
+      <p>Wir erheben personenbezogene Daten nur, wenn Sie uns diese im Rahmen einer Bestellung oder Kontaktaufnahme mitteilen. Diese Daten werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet und nicht an Dritte weitergegeben.</p>
+      <h3>3. Ihre Rechte</h3>
+      <p>Sie haben das Recht auf Auskunft, Berichtigung und Löschung Ihrer gespeicherten Daten. Kontakt: <a href="mailto:info@don-ciccio.de">info@don-ciccio.de</a></p>
+      <h3>4. Hosting</h3>
+      <p>Diese Website wird bei Hostinger International Ltd. gehostet.</p>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-agb" onclick="closeModalOverlay(event,'modal-agb')">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal('modal-agb')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <h2>Allgemeine Geschäftsbedingungen</h2>
+      <h3>§ 1 Geltungsbereich</h3>
+      <p>Diese AGB gelten für alle Bestellungen über Don Ciccio Pizzeria, Marburger Straße 5, 57223 Kreuztal.</p>
+      <h3>§ 2 Bestellung & Lieferung</h3>
+      <p>Bestellungen sind telefonisch möglich. Die Lieferung erfolgt in Kreuztal &amp; Umgebung zum Mindestbestellwert von 12,00 €. Lieferzeiten sind Richtwerte und können je nach Auslastung variieren.</p>
+      <h3>§ 3 Preise & Zahlung</h3>
+      <p>Alle Preise inkl. gesetzlicher MwSt. Zahlung per Bar, EC-Karte oder PayPal bei Lieferung.</p>
+      <h3>§ 4 Reklamationen</h3>
+      <p>Bei Mängeln wenden Sie sich bitte sofort telefonisch an uns. Wir finden eine schnelle Lösung.</p>
+    </div>
+  </div>
+
+  <!-- ========================
+       JAVASCRIPT
+  ========================= -->
+  <script>
+    // Navbar scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // Mobile menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    function closeMobileMenu() { mobileMenu.classList.remove('open'); }
+
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+    // Menu tabs (UI only)
+    document.querySelectorAll('.menu-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+
+    // Contact form
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('cf-submit');
+        btn.disabled = true;
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Nachricht gesendet!';
+        btn.style.background = '#16a34a';
+        contactForm.reset();
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Nachricht senden';
+          btn.style.background = '';
+        }, 4000);
+      });
+    }
+
+    // Modals
+    function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+    function closeModalOverlay(e, id) { if (e.target === e.currentTarget) closeModal(id); }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; });
+    });
+
+    // Background video autoplay
+    const bgVideo = document.getElementById('bg-video');
+    if (bgVideo) {
+      bgVideo.muted = true;
+      bgVideo.load();
+      const tryPlay = () => bgVideo.play().catch(() => {});
+      tryPlay();
+      ['touchstart','click','scroll'].forEach(evt => document.addEventListener(evt, tryPlay, { once: true, passive: true }));
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) tryPlay(); });
+    }
+  </script>
+
+</body>
+</html>
